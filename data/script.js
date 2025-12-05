@@ -71,6 +71,19 @@ if (!!window.EventSource) {
     console.log("Events Connected");
   }, false);
 
+  source.addEventListener('test', function (e) {
+    var obj = JSON.parse(e.data);
+    document.getElementById("gyroX").innerHTML = obj.gyroX;
+    document.getElementById("gyroY").innerHTML = obj.gyroY;
+    document.getElementById("gyroZ").innerHTML = obj.gyroZ;
+
+    // Change cube rotation after receiving the readinds
+    cube.rotation.x = obj.gyroY;
+    cube.rotation.z = obj.gyroX;
+    cube.rotation.y = obj.gyroZ;
+    renderer.render(scene, camera);
+  }, false);
+
   source.addEventListener('error', function(e) {
     if (e.target.readyState != EventSource.OPEN) {
       console.log("Events Disconnected");
@@ -107,7 +120,8 @@ if (!!window.EventSource) {
 
 function resetPosition(element){
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "/"+element.id, true);
+  element.innerHTML = "CLICKED"
+  xhr.open("GET", "/" + element.id, true);
   console.log(element.id);
   xhr.send();
 }
